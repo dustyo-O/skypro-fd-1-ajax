@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .error {
+            color: lightcoral;
+        }
+
+        .error_hidden {
+            display: none;
+        }
+
+        .request-button__icon[class] {
+            display: none;
+
+            font-size: 12px;
+        }
+
+        .request-button.request-button_in-progress .request-button__icon {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+</head>
+<body>
+    <h1>AJAX</h1>
+    <div class="user"></div>
+    <div class="error error_hidden"></div>
+    <button class="button">Кнопка-консоль-лог</button>
+    <button class="request-button"><i class="request-button__icon fa fa-spinner fa-pulse fa-3x fa-fw"></i>Кнопка-запрос</button>
+    <script src="./js/http-request.js"></script>
+    <script>
+        const user = document.querySelector('.user');
+        const requestButton = document.querySelector('.request-button');
+        const error = document.querySelector('.error');
+
+        function showUser(userData) {
+            requestButton.removeAttribute('disabled');
+            requestButton.classList.remove('request-button_in-progress');
+
+            user.textContent = userData.username;
+        }
+
+        function showError(errorMessage) {
+            requestButton.removeAttribute('disabled');
+            requestButton.classList.remove('request-button_in-progress');
+
+            error.classList.remove('error_hidden');
+
+            error.textContent = errorMessage;
+        }
+        const button = document.querySelector('.button');
+
+        button.addEventListener('click', () => {
+            console.log('Консоль лог ' + Date.now());
+        });
+
+        requestButton.addEventListener('click', () => {
+            requestButton.disabled = 'disabled';
+            requestButton.classList.add('request-button_in-progress');
+
+            httpRequest({
+                url: 'user.json',
+                onSuccess: showUser,
+                onError: showError,
+            });
+        });
+    </script>
+</body>
+</html>

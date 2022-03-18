@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button class="where-i-am">Где я?</button>
+    <script src="./js/http-request.js"></script>
+    <script>
+        const whereIAm = document.querySelector('.where-i-am');
+
+        function drawLocation(coords, cities, targetElement) {
+            let minIndex;
+            let minDistance = Infinity;
+
+            for(let i = 0; i < cities.length; i++) {
+                const distance = (coords.latitude - Number(city.lat)) ** 2 + (coords.longitude - Number(city.lng)) ** 2;
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    minIndex = i;
+                };
+            }
+
+            console.log(minIndex);
+            console.log(minDistance)
+
+            targetElement.textContent = cities[minIndex].name;
+        }
+
+        whereIAm.addEventListener('click', (event) => {
+            navigator.geolocation.getCurrentPosition((data) => {
+                const { coords } = data;
+
+                httpRequest({
+                    url: 'https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json',
+                    onSuccess: (cities) => {
+                        drawLocation(coords, cities, event.target);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

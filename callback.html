@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="coin-flip"></div>
+    <button class="throw-button">Бросить</button>
+    <button class="throw-button-alert">Бросить</button>
+    <script>
+        const button = document.querySelector('.throw-button');
+        const buttonAlert = document.querySelector('.throw-button-alert');
+        const coinFlip = document.querySelector('.coin-flip');
+
+        function getCoinFlip(callback) {
+            setTimeout(function() {
+                const result = Math.random() > 0.5 ? 'Орёл' : 'Решка';
+
+                callback(result);
+            }, 3000);
+        }
+
+        button.addEventListener('click', () => {
+            getCoinFlip(function(coinFlipResult) {
+                coinFlip.textContent = coinFlipResult;
+            });
+        });
+
+        buttonAlert.addEventListener('click', () => {
+            getCoinFlip(function(coinFlipResult) {
+                alert(coinFlipResult);
+            });
+        });
+
+    </script>
+</body>
+</html>

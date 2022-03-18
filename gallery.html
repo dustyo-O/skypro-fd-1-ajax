@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .gallery-image {
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <img class="gallery-image">
+    <h2 class="gallery-image-title"></h2>
+    <button class="gallery-back"><--</button>
+    <button class="gallery-forward">--></button>
+    <script src="./js/http-request.js"></script>
+    <script>
+        const galleryImage = document.querySelector('.gallery-image');
+        const galleryImageTitle = document.querySelector('.gallery-image-title');
+        const galleryBack = document.querySelector('.gallery-back');
+        const galleryForward = document.querySelector('.gallery-forward');
+        let currentImage = 1;
+        let maxImage = Infinity;
+        let minImage = 1;
+
+        function renderCurrentImage() {
+            httpRequest({
+                url: `/gallery/image${currentImage}.json`,
+                onSuccess: ({ title, image }) => {
+                    galleryImageTitle.textContent = title;
+
+                    galleryImage.src = image;
+
+                    if (currentImage === 1) {
+                        galleryBack.disabled = 'disabled';
+                    } else {
+                        galleryBack.removeAttribute('disabled');
+                    }
+
+                    httpRequest({
+                        url: `/gallery/image${currentImage + 1}.json`,
+                        onSuccess: () => {
+                            galleryForward.removeAttribute('disabled');
+                        },
+                        onError: () => {
+                            galleryForward.disabled = 'disabled';
+                        }
+                    });
+                }
+            });
+        }
+
+        galleryBack.addEventListener('click', () => {
+            currentImage -= 1;
+
+            if (currentImage < minImage) {
+                currentImage = maxImage;
+            }
+
+            renderCurrentImage();
+        });
+
+        galleryForward.addEventListener('click', () => {
+            currentImage += 1;
+
+            if (currentImage > maxImage) {
+                currentImage = minImage;
+            }
+
+            renderCurrentImage();
+        })
+
+        renderCurrentImage();
+    </script>
+</body>
+</html>
